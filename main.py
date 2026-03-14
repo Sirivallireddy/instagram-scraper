@@ -9,10 +9,10 @@ APIFY_TOKEN = "apify_api_hhnnKqvfAlnYXIGQqSef3FTOg4SyF94aR1OL"
 
 client = ApifyClient(APIFY_TOKEN)
 
-username = "nasa"
+username = "dee_scribble"
 
 run_input = {
-    "directUrls": ["https://www.instagram.com/nasa/"],
+    "directUrls": ["https://www.instagram.com/dee_scribble/"],
     "resultsType": "posts",
     "resultsLimit": 100,
     "addParentData": True,
@@ -30,7 +30,11 @@ def transcribe_video(video_url):
     video_file = "temp_video.mp4"
 
     # download video
-    r = requests.get(video_url)
+    try:
+        r = requests.get(video_url, timeout=30)
+    except:
+        print("Video download failed, skipping...")
+        return None
     with open(video_file, "wb") as f:
         f.write(r.content)
 
@@ -41,10 +45,11 @@ def transcribe_video(video_url):
 
     # transcribe
     model = whisper.load_model("base")
-    result = model.transcribe(audio_file)
+    result = model.transcribe(audio_file, task="translate")
 
     return result["text"]
 for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+    print(item.get("ownerUsername"))
 
     if item.get("type") != "Video":
         continue
