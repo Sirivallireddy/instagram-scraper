@@ -1,8 +1,4 @@
 apify-client
-moviepy
-openai-whisper
 requests
-imageio
-imageio-ffmpeg
 fastapi
 uvicorn
