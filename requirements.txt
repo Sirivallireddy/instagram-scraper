@@ -1,4 +1,0 @@
-apify-client
-requests
-fastapi
-uvicorn
